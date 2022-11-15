@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <!-- Content-Security-Policy
+         Customize this policy to fit your own app's needs. For more guidance, see:
+         https://github.com/apache/cordova-plugin-whitelist/blob/master/README.md#content-security-policy
+    -->
+    <meta content="default-src *; img-src 'self' data:; style-src 'self' 'unsafe-inline'; script-src 'self'"
+          http-equiv="Content-Security-Policy">
+    <meta content="telephone=no" name="format-detection">
+    <meta content="no" name="msapplication-tap-highlight">
+    <meta content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width"
+          name="viewport">
+
+    <title>Shifumi</title>
+    <!-- On inclut le CSS de JQuery Mobile -->
+    <link href="css/vendor/jquery.mobile-1.4.5.min.css" rel="stylesheet" type="text/css">
+    <!-- et le CSS spécifique à l'application -->
+    <link href="css/index.css" rel="stylesheet" type="text/css">
+    <!-- Bibliothèques JS pour l'environnement (cordova, JQuery, Jquery Mobile) -->
+    <script src="cordova.js"></script> <!-- cordova.js généré à la "compilation" -->
+    <script src="js/vendor/jquery-2.1.4.min.js"></script>
+    <script src="js/vendor/jquery.mobile-1.4.5.min.js"></script>
+    <!-- modules de l'application (index+controleur+modele) -->
+    <script src="js/shifumi.bundle.js"></script> <!-- généré par webpack à la "compilation" -->
+</head>
+<body>
+<!-- Fichier HTML = PARTIE "VUE" de l'application                                -->
+<!--   composée d'une suite de 4 pages Jquery Mobile                             -->
+<!-- Le comportement de chaque page est géré par un contrôleur (événements JS)   -->
+
+<!--======== PAGE "vueChargement" - pour attendre que le périphérique soit prêt  ========-->
+<!--           Contient un Header et un Footer qui seront dupliqués sur les autres pages  -->
+<div data-role="page" data-theme="a" id="vueChargement">
+    <header id="shifumiHeader">
+        <div data-id="monHeader" data-position="fixed" data-role="header">
+            <h1>Shifumi</h1>
+        </div>
+    </header>
+    <div class="ui-content" data-role="main">
+        <p>Chargement du jeu...</p>
+    </div>
+    <footer id="shifumiFooter">
+        <div data-id="monFooter" data-position="fixed" data-role="footer">
+            <h3>Un jeu MVC en Cordova+Jquery Mobile</h3>
+        </div>
+    </footer>
+</div>
+
+<!--======== PAGE "vueAccueil" - saisie nom joueur    ========-->
+<div data-role="page" data-theme="a" id="vueAccueil">
+    <div class="ui-content" data-role="main">
+        <p>Rappel des règles : la pierre bat les ciseaux (en les émoussant), les ciseaux battent la feuille (en la
+            coupant), la feuille bat la pierre (en l'enveloppant)</p>
+            <div class="ui-grid-a">
+                <div class="ui-block-a content">
+                    <strong>Joueur 1  </strong> 
+                    <input id="nomJoueur1" placeholder="Entrer le nom du (de la) joueur(euse)s" type="text"/>
+                    <button id="btnPhoto1" data-icon="camera">Photo</button>
+                    <img id="imgPhoto1" src="" style="width: 200px; margin-left:auto; margin-right:auto; display: block;"/>
+                </div>
+                <div class="ui-block-b content">
+                    <strong>Joueur 2  </strong> 
+                    <input id="nomJoueur2" placeholder="Entrer le nom du (de la) joueur(euse)s" type="text"/>
+                    <button id="btnPhoto2" data-icon="camera">Photo</button>
+                    <img id="imgPhoto2" src="" style="width: 200px; margin-left:auto; margin-right:auto; display: block;"/>
+                </div>
+            </div>
+        <button id="btnNouvellePartie" data-icon="carat-r">Jouer</button>
+    </div>
+</div>
+
+<!--======== PAGE "vueJeu" - déroulement d'une partie ========-->
+<div data-role="page" data-theme="a" id="vueJeu">
+    <div class="ui-content ui-mini" data-role="main">
+        <div style="text-align: center; justify-content: center;">
+            <div class="ui-grid-c">
+                <p>
+                    Joueur 1 : 
+                    <img data-role="imgPhoto1" src="" style="width: 80px; vertical-align: middle;"/>
+                    <b><span data-role="nomJoueur1" style="color:blue"></span></b>
+                </p>
+                <p>
+                    Joueur 2 :
+                    <img data-role="imgPhoto2" src="" style="width: 80px; vertical-align: middle;"/>
+                    <b><span data-role="nomJoueur2" style="color:red"></span></b>
+                </p>
+            </div>
+
+            <p>
+                A <strong id="infoJ"></strong> de jouer...
+
+
+            </p>
+           
+                <div class="ui-grid-b ">
+                    <div class="ui-block-a ui-responsive">
+                        <button class="mybtn" id="btnJouer1" style="height : 120px;">
+                             <img src="../www/images/imgvide.png" data-role="" id="imgBtn1" height ="80" width="80" alt=""/> 
+                        </button>
+
+                    </div>
+                    <div class="ui-block-b ui-responsive" >
+                        <button class="mybtn" id="btnJouer2" style="height : 120px;">
+                            <img src="vide" data-role="" id="imgBtn2" height ="80" width="80" alt=""/> 
+
+                        </button>
+                    </div>
+                    <div class="ui-block-c ui-responsive">
+                        <button class="mybtn" id="btnJouer3" style="height : 120px;">
+                            <img src="" data-role="" id="imgBtn3" height ="80" width="80" alt=""/> 
+                        </button>
+                    </div>
+                    <div class="ui-block-a ui-responsive">
+                        <button class="mybtn" id="btnJouer4" style="height : 120px;">
+                            <img src="" data-role="" id="imgBtn4" height ="80" width="80" alt=""/> 
+                        </button>
+                    </div>
+                    <div class="ui-block-b ui-responsive" >
+                        <button class="mybtn" id="btnJouer5" style="height : 120px;">
+                            <img src="" data-role="" id="imgBtn5" height ="80" width="80" alt=""/> 
+                        </button>
+                    </div>
+                    <div class="ui-block-c ui-responsive" >
+                        <button class="mybtn" id="btnJouer6" style="height : 120px;">
+                            <img src="" data-role="" id="imgBtn6" height ="80" width="80" alt=""/> 
+                        </button>
+                    </div>
+                    <div class="ui-block-a ui-responsive" >
+                        <button class="mybtn" id="btnJouer7" style="height : 120px;">
+                            <img src="" data-role="" id="imgBtn7" height ="80" width="80" alt=""/> 
+                        </button>
+                    </div>
+                    <div class="ui-block-b ui-responsive" >
+                        <button class="mybtn" id="btnJouer8" style="height : 120px;">
+                            <img src="" data-role="" id="imgBtn8" height ="80" width="80" alt=""/> 
+                        </button>
+                    </div>
+                    <div class="ui-block-c ui-responsive" >
+                        <button class="mybtn" id="btnJouer9" style="height : 120px;">
+                            <img src="" data-role="" id="imgBtn9" height ="80" width="80" alt=""/> 
+                        </button>
+                    </div>
+                </div>
+        </div>
+        <div id="resultat">
+            <p> Votre résultat : <b><span id="texteResultat"></span></b></p>
+            <button id="btnNouveauCoup" data-icon="refresh">Rejouer</button>
+            <button id="btnFinPartie" data-icon="carat-r">Score</button>
+        </div>
+    </div>
+</div>
+
+<!--======== PAGE "vueScore" - affichage des scores   ========-->
+<div data-role="page" data-theme="a" id="vueFin">
+    <div class="ui-content" data-role="main">
+        <div style="text-align: center;">
+ 
+            <img data-role="imgPhoto1" src=""
+                 style="width: 200px; margin-left:auto; margin-right:auto; display: block;"/>
+            <h1><span data-role="nomJoueur1" style="color:blue"></span></h1>
+            <p>
+                <span style="color:green">Victoires : <span id="nbVictoires1"></span></span>
+                / <span style="color:orange">Nuls : <span id="nbNuls1"></span></span>
+                / <span style="color:red">Défaites : <span id="nbDefaites1"></span></span>
+            </p>
+            <button id="btnSupprimer1" data-icon="delete">Supprimer Joueur 1</button>
+        </div>
+        
+        <div style="text-align: center;">
+
+            <img data-role="imgPhoto2" src=""
+                 style="width: 200px; margin-left:auto; margin-right:auto; display: block;"/>
+            <h1><span data-role="nomJoueur2" style="color:blue"></span></h1>
+            <p>
+                <span style="color:green">Victoires : <span id="nbVictoires2"></span></span>
+                / <span style="color:orange">Nuls : <span id="nbNuls2"></span></span>
+                / <span style="color:red">Défaites : <span id="nbDefaites2"></span></span>
+            </p>
+            <button id="btnSupprimer2" data-icon="delete">Supprimer Joueur 2</button>
+        </div>
+        <br>
+        <button id="btnSupprimer3" data-icon="delete">Supprimer les deux joueurs</button>
+        <button id="btnRetourJeu" data-icon="carat-l">Continuer</button>
+        
+        <button id="btnRetourAccueil" data-icon="home">Nouveau Joueur</button>
+    </div>
+</div>
+
+</body>
+</html>

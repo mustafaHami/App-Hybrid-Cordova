@@ -1,0 +1,18 @@
+
+
+.myimg {
+    display: block;
+    margin: auto;
+}
+#content{
+    padding: 4px;
+}
+.container{
+    justify-content: center;
+    align-items: center;
+    margin: auto;
+}
+.mybtn:disabled {
+  
+  opacity: 0.9;
+}
